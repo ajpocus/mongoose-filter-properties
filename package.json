@@ -15,10 +15,11 @@
     "user input"
   ],
   "dependencies" : {
-    "mongoose":  "3.x"
+    "mongoose": "3.x"
   },
   "devDependencies": {
-    "mocha"    :  "1.x"
+    "mocha": "1.x",
+    "should": "1.x"
   },
   "license": "MIT",
   "engines": {

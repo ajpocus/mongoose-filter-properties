@@ -32,11 +32,15 @@ exports = module.exports = function mongooseFilterProperties(schema, opts) {
     // attribute are passed through. I'll add a whitelist mode to the schema
     // options at some point.
     for (prop in properties) {
-      if (typeof properties[prop][filterType] === 'undefined') {
-        continue;
-      } else {
-        if (typeof properties[prop][filterType] === false) {
-          delete properties[prop];
+      if (!schema.tree[prop]) { continue; }
+      if (properties.hasOwnProperty(prop)) {
+        console.log(prop);
+        if (typeof schema.tree[prop][filterType] === 'undefined') {
+          continue;
+        } else {
+          if (typeof schema.tree[prop][filterType] === false) {
+            delete properties[prop];
+          }
         }
       }
     }
