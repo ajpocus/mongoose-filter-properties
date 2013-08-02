@@ -1,14 +1,45 @@
-// reference the http module so we can create a webserver
-var http = require("http");
-
-// create a server
-http.createServer(function(req, res) {
-    // on every request, we'll output 'Hello world'
-    res.end("Hello world from Cloud9!");
-}).listen(process.env.PORT, process.env.IP);
-
-// Note: when spawning a server on Cloud9 IDE, 
-// listen on the process.env.PORT and process.env.IP environment variables
-
-// Click the 'Run' button at the top to start your server,
-// then click the URL that is emitted to the Output tab of the console
+exports = module.exports = function mongooseFilterProperties(schema, opts) {
+  schema.static('filter', function (properties, filterType, cb) {
+    filterProperties(properties, filterType, function (err, properties) {
+      return cb(err, properties);
+    });
+  });
+  
+  schema.method('filter', function (filterType, cb) {
+    var properties = this;
+    filterProperties(properties, filterType, function (err, properties) {
+      return cb(err, properties);
+    });
+  });
+  
+  function filterProperties(properties, filterType, cb) {
+    // Ensure filterType is present. Should be 'w', 'r', 'readable', or
+    // 'writeable'. Otherwise an error will be thrown.
+    if (!filterType) { return cb(null, properties); }
+    if (filterType === 'w') { filterType = 'writeable'; }
+    if (filterType === 'r') { filterType = 'readable'; }
+    if (filterType !== "readable" && filterType !== 'writeable') {
+      return cb(null, properties);
+    }
+    
+    // Ensure 'properties' is an object. Otherwise, an error will be thrown.
+    // This is for cases where the method is called as a static.
+    if (typeof properties !== 'object') {
+      throw new Error("The first parameter must be an object.");
+    }
+    
+    // Default behavior is a blacklist; properties without a filterType
+    // attribute are passed through. I'll add a whitelist mode to the schema
+    // options at some point.
+    for (prop in properties) {
+      if (typeof properties[prop][filterType] === 'undefined') {
+        continue;
+      } else {
+        if (typeof properties[prop][filterType] === false) {
+          delete properties[prop];
+        }
+      }
+    }
+    return cb(null, properties);
+  }
+};

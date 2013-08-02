@@ -9,9 +9,10 @@
     "url": "https://github.com/ajpocus/mongoose-filter-properties.git"
   },
   "keywords": [
-    "cli",
-    "http",
-    "server"
+    "mongoose",
+    "security",
+    "fiters",
+    "user input"
   ],
   "dependencies" : {
     "mongoose":  "3.x"
