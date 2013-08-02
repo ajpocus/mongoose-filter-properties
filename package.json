@@ -1,0 +1,26 @@
+{
+  "name": "mongoose-filter-properties",
+  "version": "0.1.0",
+  "author": "Austin Pocus <ajpocus@gmail.com>",
+  "description": "filter readable/writeable properties to protect your models",
+  "main": "./index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ajpocus/mongoose-filter-properties.git"
+  },
+  "keywords": [
+    "cli",
+    "http",
+    "server"
+  ],
+  "dependencies" : {
+    "mongoose":  "3.x"
+  },
+  "devDependencies": {
+    "mocha"    :  "1.x"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">=0.10"
+  }
+}
