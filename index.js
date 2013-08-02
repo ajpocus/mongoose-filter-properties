@@ -40,12 +40,13 @@ exports = module.exports = function mongooseFilterProperties(schema, opts) {
       
       if (typeof treeProp[filterType] !== 'undefined') {
         if (treeProp[filterType] === false) {
-          delete properties[prop];
-          console.log(properties);
+          properties.set(prop, undefined);
+          console.log(prop);
+          console.log(properties[prop]);
         }
       }
     }
-    
+    console.log(properties);
     return cb(null, properties);
   }
 };
