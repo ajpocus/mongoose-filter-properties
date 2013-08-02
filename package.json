@@ -15,7 +15,8 @@
     "user input"
   ],
   "dependencies" : {
-    "mongoose": "3.x"
+    "mongoose": "3.x",
+    "underscore": "latest"
   },
   "devDependencies": {
     "mocha": "1.x",

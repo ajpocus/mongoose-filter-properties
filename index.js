@@ -1,3 +1,5 @@
+var _ = require('underscore');
+
 exports = module.exports = function mongooseFilterProperties(schema, opts) {
   schema.static('filter', function (properties, filterType, cb) {
     filterProperties(properties, filterType, function (err, properties) {
@@ -18,26 +20,28 @@ exports = module.exports = function mongooseFilterProperties(schema, opts) {
     if (!filterType) { return cb(null, properties); }
     if (filterType === 'w') { filterType = 'writeable'; }
     if (filterType === 'r') { filterType = 'readable'; }
-    if (filterType !== "readable" && filterType !== 'writeable') {
+    if (filterType !== 'readable' && filterType !== 'writeable') {
       return cb(null, properties);
     }
-    console.log(schema);
+
     // Ensure 'properties' is an object. Otherwise, an error will be thrown.
     // This is for cases where the method is called as a static.
     if (typeof properties !== 'object') {
       throw new Error("The first parameter must be an object.");
     }
+    properties = _.clone(properties);
     
     // Default behavior is a blacklist; properties without a filterType
     // attribute are passed through. I'll add a whitelist mode to the schema
     // options at some point.
-    for (prop in schema.tree) {
+    for (prop in properties) {
       var treeProp = schema.tree[prop];
+      if (typeof treeProp === 'undefined') { continue; }
+      
       if (typeof treeProp[filterType] !== 'undefined') {
-        console.log('filtertype present');
-        console.log(filterType);
         if (treeProp[filterType] === false) {
           delete properties[prop];
+          console.log(properties);
         }
       }
     }
