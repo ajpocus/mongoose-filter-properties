@@ -32,22 +32,26 @@ exports = module.exports = function mongooseFilterProperties(schema, opts) {
     
     // Clone the object, to prevent any accidental data modification.
     var props = _.clone(properties);
+    var blacklist = _.filter(Object.keys(schema.tree), function (pathName) {
+      if (typeof schema.tree[pathName][filterType] === 'undefined') {
+        return false;
+      } else {
+        if (schema.tree[pathName][filterType] === false) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+    });
     
     // Default behavior is a blacklist; properties without a filterType
     // attribute are passed through. I'll add a whitelist mode to the schema
     // options at some point.
-    for (prop in props) {
-      var treeProp = schema.tree[prop];
-      if (typeof treeProp === 'undefined') { continue; }
-      
-      if (typeof treeProp[filterType] !== 'undefined') {
-        if (treeProp[filterType] === false) {
-          props.set(prop, undefined);
-          delete props[prop];
-        }
-      }
+    for (prop in blacklist) {
+      delete props[prop];
     }
     console.log(props);
+    console.log(blacklist);
     return cb(null, props);
   }
 };
