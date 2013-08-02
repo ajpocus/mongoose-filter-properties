@@ -29,24 +29,25 @@ exports = module.exports = function mongooseFilterProperties(schema, opts) {
     if (typeof properties !== 'object') {
       throw new Error("The first parameter must be an object.");
     }
-    properties = _.clone(properties);
+    
+    // Clone the object, to prevent any accidental data modification.
+    var props = _.clone(properties);
     
     // Default behavior is a blacklist; properties without a filterType
     // attribute are passed through. I'll add a whitelist mode to the schema
     // options at some point.
-    for (prop in properties) {
+    for (prop in props) {
       var treeProp = schema.tree[prop];
       if (typeof treeProp === 'undefined') { continue; }
       
       if (typeof treeProp[filterType] !== 'undefined') {
         if (treeProp[filterType] === false) {
-          properties.set(prop, undefined);
-          console.log(prop);
-          console.log(properties[prop]);
+          props.set(prop, undefined);
+          delete props[prop];
         }
       }
     }
-    console.log(properties);
-    return cb(null, properties);
+    console.log(props);
+    return cb(null, props);
   }
 };
