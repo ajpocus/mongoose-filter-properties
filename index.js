@@ -35,6 +35,8 @@ exports = module.exports = function mongooseFilterProperties(schema, opts) {
       if (!schema.tree[prop]) { continue; }
       if (properties.hasOwnProperty(prop)) {
         console.log(prop);
+        console.log(schema.tree);
+        console.log(schema.tree[prop]);
         if (typeof schema.tree[prop][filterType] === 'undefined') {
           continue;
         } else {
