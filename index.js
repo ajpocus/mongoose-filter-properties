@@ -21,7 +21,7 @@ exports = module.exports = function mongooseFilterProperties(schema, opts) {
     if (filterType !== "readable" && filterType !== 'writeable') {
       return cb(null, properties);
     }
-    
+    console.log(schema);
     // Ensure 'properties' is an object. Otherwise, an error will be thrown.
     // This is for cases where the method is called as a static.
     if (typeof properties !== 'object') {
@@ -31,21 +31,17 @@ exports = module.exports = function mongooseFilterProperties(schema, opts) {
     // Default behavior is a blacklist; properties without a filterType
     // attribute are passed through. I'll add a whitelist mode to the schema
     // options at some point.
-    for (prop in properties) {
-      if (!schema.tree[prop]) { continue; }
-      if (properties.hasOwnProperty(prop)) {
-        console.log(prop);
-        console.log(schema.tree);
-        console.log(schema.tree[prop]);
-        if (typeof schema.tree[prop][filterType] === 'undefined') {
-          continue;
-        } else {
-          if (typeof schema.tree[prop][filterType] === false) {
-            delete properties[prop];
-          }
+    for (prop in schema.tree) {
+      var treeProp = schema.tree[prop];
+      if (typeof treeProp[filterType] !== 'undefined') {
+        console.log('filtertype present');
+        console.log(filterType);
+        if (treeProp[filterType] === false) {
+          delete properties[prop];
         }
       }
     }
+    
     return cb(null, properties);
   }
 };
