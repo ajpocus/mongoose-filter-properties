@@ -42,15 +42,15 @@ exports = module.exports = function mongooseFilterProperties(schema, opts) {
       }
     });
 
-    // Default behavior is a blacklist; properties without a filterType
-    // attribute are passed through. I'll add a whitelist mode to the schema
+    // Default behavior is a whitelist; properties without a filterType
+    // attribute are passed through. I'll add a strict mode to the schema
     // options at some point.
     var newProps = {};
     for (var i = 0; i < whitelist.length; i++) {
       var prop = whitelist[i];
       newProps[prop] = properties[prop];
     }
-    console.log(newProps);
+
     return cb(null, newProps);
   }
 };

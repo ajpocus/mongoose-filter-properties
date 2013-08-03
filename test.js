@@ -38,7 +38,6 @@ describe("mongoose-filter-properties", function () {
       var user = new User({ name: "Foo", email: "foo@example.com" });
       user.filter('readable', function (err, user) {
         if (err) { throw err; }
-        console.log(user);
         should.not.exist(user.email);
         (typeof user.email).should.equal('undefined');
         done();
